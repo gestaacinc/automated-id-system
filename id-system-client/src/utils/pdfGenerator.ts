@@ -27,7 +27,7 @@ export const generateAndSavePDF = async (
     await waitForImagesToLoad(backElement);
 
     const captureOptions = {
-      scale: 3,
+      scale: 4,
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#FFFFFF',

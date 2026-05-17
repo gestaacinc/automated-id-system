@@ -78,19 +78,19 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onPhotoProcessed }) => {
     }, 700);
   };
 
-  // These values must match the SVG crop window below (viewBox 75x100).
-  // Crop window: x=7.5, y=8, w=60, h=80 → normalized as %.
+  // Crop window in the SVG mask (viewBox 75x100): x=7.5, y=8, w=60, h=80.
   const CROP_X_PCT = 0.10;
   const CROP_Y_PCT = 0.08;
   const CROP_W_PCT = 0.80;
   const CROP_H_PCT = 0.80;
+  // Final output resolution for the ID photo (square, high-res for sharp PDF print).
+  const OUTPUT_SIZE = 800;
 
   const capturePhoto = () => {
     const video = videoRef.current;
     if (!video || !video.videoWidth || !video.videoHeight) return;
     setIsCapturing(true);
 
-    // Find the visible 3:4 portion of the video (matches what object-cover shows).
     const TARGET_ASPECT = 3 / 4;
     const vw = video.videoWidth;
     const vh = video.videoHeight;
@@ -106,21 +106,30 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onPhotoProcessed }) => {
     const visX = (vw - visW) / 2;
     const visY = (vh - visH) / 2;
 
-    // Now crop to the bright window that the user sees (matches the SVG mask).
-    const sx = visX + visW * CROP_X_PCT;
-    const sy = visY + visH * CROP_Y_PCT;
-    const sw = visW * CROP_W_PCT;
-    const sh = visH * CROP_H_PCT;
+    // Crop region inside the visible 3:4 viewport (matches SVG mask).
+    const cropX = visX + visW * CROP_X_PCT;
+    const cropY = visY + visH * CROP_Y_PCT;
+    const cropW = visW * CROP_W_PCT;
+    const cropH = visH * CROP_H_PCT;
+
+    // Output square (1:1) with the face centered in the upper portion.
+    // We take a 1:1 region from the top of the 3:4 crop.
+    const outSide = Math.min(cropW, cropH);
+    const sx = cropX + (cropW - outSide) / 2;
+    // Bias upward (~10% of the way down) so the face sits naturally framed.
+    const sy = cropY + Math.max(0, cropH * 0.05);
 
     const canvas = document.createElement('canvas');
-    canvas.width = sw;
-    canvas.height = sh;
+    canvas.width = OUTPUT_SIZE;
+    canvas.height = OUTPUT_SIZE;
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       setIsCapturing(false);
       return;
     }
-    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, sw, sh);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(video, sx, sy, outSide, outSide, 0, 0, OUTPUT_SIZE, OUTPUT_SIZE);
 
     canvas.toBlob(
       (blob) => {
@@ -132,7 +141,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onPhotoProcessed }) => {
         }
       },
       'image/jpeg',
-      0.92
+      0.95
     );
   };
 

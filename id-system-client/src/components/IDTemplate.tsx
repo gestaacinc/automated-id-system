@@ -93,16 +93,23 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
                         borderRadius: '50%',
                         overflow: 'hidden',
                         backgroundColor: '#F3F4F6',
-                        backgroundImage: data.photoUrl ? `url("${data.photoUrl}")` : 'none',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center 25%',
-                        backgroundRepeat: 'no-repeat',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
                 >
-                    {!data.photoUrl && (
+                    {data.photoUrl ? (
+                        <img
+                            src={data.photoUrl}
+                            alt="Student"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                display: 'block',
+                                objectFit: 'cover'
+                            }}
+                        />
+                    ) : (
                         <span style={{ fontSize: '10px', color: '#9CA3AF', fontWeight: 'bold', letterSpacing: '0.05em' }}>PHOTO</span>
                     )}
                 </div>
@@ -127,9 +134,9 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
                 <span style={{ fontSize: '8.5px', fontWeight: 900, color: '#1F2937', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.1, marginTop: '2px' }}>{data.course || 'DATA ANALYTICS LEVEL III'}</span>
             </div>
 
-            <div style={{ ...flexColStyle, alignItems: 'center', backgroundColor: 'rgba(254, 226, 226, 0.4)', padding: '4px 8px', borderRadius: '4px', border: '1px solid rgba(220, 38, 38, 0.15)' }}>
+            <div style={{ ...flexColStyle, alignItems: 'center', backgroundColor: 'rgba(254, 226, 226, 0.4)', padding: '5px 18px 6px', borderRadius: '4px', border: '1px solid rgba(220, 38, 38, 0.15)', minWidth: '110px' }}>
                 <span style={{ fontSize: '6px', fontWeight: 900, color: '#1E3A8A', textTransform: 'uppercase', letterSpacing: '0.12em', lineHeight: 1 }}>Student ID Number</span>
-                <span style={{ fontSize: '14px', fontWeight: 900, color: '#DC2626', fontFamily: 'monospace', lineHeight: 1.2, letterSpacing: '0.05em' }}>{data.studentId || '2026-0000'}</span>
+                <span style={{ fontSize: '13px', fontWeight: 900, color: '#DC2626', fontFamily: 'monospace', lineHeight: 1.2, letterSpacing: '0.04em', marginTop: '2px' }}>{data.studentId || '2026-0000'}</span>
             </div>
         </div>
 
