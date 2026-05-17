@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Save, UserPlus, Printer, FileText } from 'lucide-react';
+import { Save, UserPlus, Printer, FileText, IdCard, MapPin, Phone, GraduationCap, CheckCircle2 } from 'lucide-react';
 import PhotoUploader from './components/PhotoUploader';
 import IDTemplate from './components/IDTemplate';
 import IDBackTemplate from './components/IDBackTemplate';
@@ -53,12 +53,12 @@ function App() {
 
   useEffect(() => {
     if (selectedTown && selectedBarangay) {
-      setStudentData(prev => ({ 
-        ...prev, 
-        address: `${selectedBarangay}, ${selectedTown}, Ilocos Norte` 
+      setStudentData(prev => ({
+        ...prev,
+        address: `${selectedBarangay}, ${selectedTown}, Ilocos Norte`
       }));
     } else {
-        setStudentData(prev => ({ ...prev, address: '' }));
+      setStudentData(prev => ({ ...prev, address: '' }));
     }
   }, [selectedTown, selectedBarangay]);
 
@@ -71,7 +71,7 @@ function App() {
   const handleSaveID = async () => {
     if (!idPreviewRef.current || !idBackPreviewRef.current) return;
     if (!studentData.firstName || !studentData.lastName) {
-      alert('Please fill in Student Name.');
+      alert('Please fill in the Student Name (First and Last).');
       return;
     }
 
@@ -114,17 +114,46 @@ function App() {
 
   const currentTownData = ILOCOS_NORTE_DATA.find(t => t.name === selectedTown);
 
+  // Progress indicator state
+  const hasPhoto = !!studentData.photoUrl;
+  const hasName = !!studentData.firstName && !!studentData.lastName;
+  const hasLocation = !!studentData.address;
+
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-8 font-sans">
-      <div className="max-w-6xl mx-auto">
-        <header className="mb-8 flex justify-between items-center border-b pb-4 dark:border-gray-700">
-          <div>
-            <h1 className="text-3xl font-black text-blue-600 dark:text-blue-400">ID-AUTOMATOR</h1>
-            <p className="text-gray-500 dark:text-gray-400">Automated Student ID Generation System</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30 dark:from-gray-950 dark:via-blue-950/20 dark:to-purple-950/20 text-gray-900 dark:text-gray-100 font-sans">
+      {/* Decorative background blobs */}
+      <div className="fixed top-0 left-0 w-96 h-96 bg-blue-300/20 dark:bg-blue-700/10 rounded-full filter blur-3xl pointer-events-none" />
+      <div className="fixed bottom-0 right-0 w-96 h-96 bg-purple-300/20 dark:bg-purple-700/10 rounded-full filter blur-3xl pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto p-6 lg:p-8">
+        {/* HEADER */}
+        <header className="mb-8 flex flex-col md:flex-row justify-between md:items-center gap-4 pb-6 border-b border-gray-200/70 dark:border-gray-700/70">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <IdCard className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                ID-AUTOMATOR
+              </h1>
+              <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                Automated Student ID Generation System
+              </p>
+            </div>
           </div>
-          <button 
+
+          {/* Step indicator */}
+          <div className="flex items-center space-x-2">
+            <StepBadge active={hasPhoto} label="Photo" />
+            <div className={`w-6 h-px ${hasPhoto ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'}`} />
+            <StepBadge active={hasName} label="Info" />
+            <div className={`w-6 h-px ${hasName ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-600'}`} />
+            <StepBadge active={hasLocation} label="Location" />
+          </div>
+
+          <button
             onClick={resetForm}
-            className="flex items-center px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+            className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white/80 backdrop-blur border border-gray-200 rounded-lg hover:bg-white shadow-sm hover:shadow transition dark:bg-gray-800/80 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-800"
           >
             <UserPlus className="w-4 h-4 mr-2" />
             New Student
@@ -132,200 +161,195 @@ function App() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column: Form */}
-          <div className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border dark:border-gray-700">
-            <h2 className="text-xl font-bold border-b pb-2 dark:border-gray-700">Student Information</h2>
-            
+          {/* LEFT: FORM */}
+          <div className="space-y-6 bg-white/70 dark:bg-gray-800/70 backdrop-blur p-6 lg:p-8 rounded-2xl shadow-xl shadow-gray-200/40 dark:shadow-black/20 border border-gray-200/50 dark:border-gray-700/50">
+            <SectionHeader icon={<UserPlus className="w-5 h-5" />} title="Student Information" />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-500 uppercase">First Name</label>
+              <Field label="First Name">
                 <input
                   type="text"
                   name="firstName"
                   value={studentData.firstName}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                  className="input-field"
                   placeholder="John"
                 />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-500 uppercase">Last Name</label>
+              </Field>
+              <Field label="Last Name">
                 <input
                   type="text"
                   name="lastName"
                   value={studentData.lastName}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                  className="input-field"
                   placeholder="Doe"
                 />
-              </div>
+              </Field>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-500 uppercase">Student ID #</label>
+              <Field label="Student ID #">
                 <input
                   type="text"
                   name="studentId"
                   value={studentData.studentId}
                   readOnly
-                  className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700/50 dark:border-gray-600 font-mono text-red-600 font-bold cursor-not-allowed"
+                  className="input-field bg-gray-50 dark:bg-gray-700/50 font-mono text-red-600 dark:text-red-400 font-bold cursor-not-allowed"
                 />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-500 uppercase">Course</label>
+              </Field>
+              <Field label="Course" icon={<GraduationCap className="w-3.5 h-3.5" />}>
                 <input
                   type="text"
                   name="course"
                   value={studentData.course}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                  className="input-field"
                   placeholder="Course Title"
                 />
-              </div>
+              </Field>
             </div>
 
             <PhotoUploader onPhotoProcessed={handlePhotoProcessed} />
 
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold text-gray-400 uppercase border-b dark:border-gray-700 pb-1">Location & Contact</h3>
-              
+            <div className="space-y-4 pt-2">
+              <SectionHeader icon={<MapPin className="w-5 h-5" />} title="Location & Contact" />
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase">Town / City (Ilocos Norte)</label>
+                <Field label="Town / City (Ilocos Norte)">
                   <select
                     value={selectedTown}
                     onChange={(e) => {
                       setSelectedTown(e.target.value);
                       setSelectedBarangay("");
                     }}
-                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                    className="input-field"
                   >
                     <option value="">Select Town/City</option>
                     {ILOCOS_NORTE_DATA.map(town => (
                       <option key={town.name} value={town.name}>{town.name}</option>
                     ))}
                   </select>
-                </div>
-                
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase">Barangay</label>
+                </Field>
+
+                <Field label="Barangay">
                   <select
                     value={selectedBarangay}
                     onChange={(e) => setSelectedBarangay(e.target.value)}
                     disabled={!selectedTown}
-                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="input-field disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <option value="">Select Barangay</option>
                     {currentTownData?.barangays.map(brgy => (
                       <option key={brgy} value={brgy}>{brgy}</option>
                     ))}
                   </select>
-                </div>
+                </Field>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-500 uppercase">Full Address (Preview)</label>
+              <Field label="Full Address (Preview)">
                 <input
                   type="text"
                   value={studentData.address}
                   readOnly
-                  className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-700/50 dark:border-gray-600 italic text-gray-500"
+                  className="input-field bg-gray-50 dark:bg-gray-700/50 italic text-gray-500 dark:text-gray-400"
                   placeholder="Select Town and Barangay above"
                 />
-              </div>
+              </Field>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase">Birth Date</label>
+                <Field label="Birth Date">
                   <input
                     type="text"
                     name="birthDate"
                     value={studentData.birthDate}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                    className="input-field"
                     placeholder="MM/DD/YYYY"
                   />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase">Middle Initial</label>
+                </Field>
+                <Field label="Middle Initial">
                   <input
                     type="text"
                     name="middleInitial"
                     maxLength={1}
                     value={studentData.middleInitial}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                    className="input-field"
                     placeholder="M"
                   />
-                </div>
+                </Field>
               </div>
+
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase">In Case of Emergency</label>
+                <Field label="In Case of Emergency" icon={<Phone className="w-3.5 h-3.5" />}>
                   <input
                     type="text"
                     name="emergencyContact"
                     value={studentData.emergencyContact}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                    className="input-field"
                     placeholder="Parent Name"
                   />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase">Emergency Phone</label>
+                </Field>
+                <Field label="Emergency Phone">
                   <input
                     type="text"
                     name="emergencyPhone"
                     value={studentData.emergencyPhone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600"
+                    className="input-field"
                     placeholder="0912-345-6789"
                   />
-                </div>
+                </Field>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Preview & Action */}
+          {/* RIGHT: PREVIEW & ACTION */}
           <div className="flex flex-col space-y-6">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border dark:border-gray-700 flex flex-col items-center">
-              <h2 className="text-xl font-bold mb-6 self-start border-b pb-2 w-full dark:border-gray-700">ID Preview (Front & Back)</h2>
-              
-              <div className="flex flex-col md:flex-row md:space-x-8 items-start justify-center w-full overflow-auto py-4">
+            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur p-6 lg:p-8 rounded-2xl shadow-xl shadow-gray-200/40 dark:shadow-black/20 border border-gray-200/50 dark:border-gray-700/50 flex flex-col">
+              <SectionHeader icon={<IdCard className="w-5 h-5" />} title="ID Preview (Front & Back)" />
+
+              <div className="flex flex-col md:flex-row md:space-x-6 items-center justify-center w-full overflow-auto py-4 mt-2">
                 <IDTemplate data={studentData} idRef={idPreviewRef} />
                 <IDBackTemplate data={studentData} idRef={idBackPreviewRef} />
               </div>
 
-              <div className="mt-8 w-full space-y-4">
+              <div className="mt-6 w-full space-y-4">
                 <button
                   onClick={handleSaveID}
                   disabled={isGenerating}
-                  className={`w-full flex items-center justify-center px-6 py-4 rounded-lg text-lg font-bold transition-all ${
-                    isGenerating 
-                      ? 'bg-gray-400 cursor-not-allowed' 
-                      : 'bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl'
+                  className={`group relative w-full flex items-center justify-center px-6 py-4 rounded-xl text-lg font-bold transition-all overflow-hidden ${
+                    isGenerating
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-emerald-500 via-green-600 to-emerald-600 hover:from-emerald-600 hover:via-green-700 hover:to-emerald-700 text-white shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/40 hover:-translate-y-0.5'
                   }`}
                 >
                   {isGenerating ? (
                     <>
                       <Printer className="w-6 h-6 mr-3 animate-pulse" />
-                      GENERATING 2-SIDED PDF...
+                      GENERATING PDF...
                     </>
                   ) : (
                     <>
-                      <Save className="w-6 h-6 mr-3" />
-                      GENERATE & SAVE 2-SIDED ID
+                      <Save className="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform" />
+                      GENERATE & DOWNLOAD 2-SIDED ID
                     </>
                   )}
                 </button>
 
                 {lastSavedPath && (
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start">
-                    <FileText className="w-5 h-5 text-green-600 mr-3 mt-0.5" />
-                    <div>
-                      <p className="text-sm font-bold text-green-800 dark:text-green-300">Double-Sided ID Downloaded!</p>
+                  <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/40 dark:to-emerald-950/40 border border-green-200 dark:border-green-800 rounded-xl flex items-start animate-fade-in">
+                    <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center mr-3 flex-shrink-0 shadow-md">
+                      <CheckCircle2 className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-green-800 dark:text-green-300">
+                        Double-Sided ID Downloaded!
+                      </p>
                       <p className="text-xs text-green-700 dark:text-green-400 mt-1 break-all font-mono">
+                        <FileText className="inline w-3 h-3 mr-1" />
                         {lastSavedPath}
                       </p>
                       <p className="text-xs text-green-700 dark:text-green-400 mt-1">
@@ -338,9 +362,79 @@ function App() {
             </div>
           </div>
         </div>
+
+        <footer className="mt-12 text-center text-xs text-gray-400 dark:text-gray-600">
+          <p>ID-AUTOMATOR &middot; Designed for GESTAAC</p>
+        </footer>
       </div>
+
+      <style>{`
+        .input-field {
+          width: 100%;
+          padding: 0.625rem 0.75rem;
+          border: 1px solid rgb(209 213 219);
+          border-radius: 0.5rem;
+          background-color: white;
+          color: rgb(17 24 39);
+          transition: all 0.15s;
+          font-size: 0.875rem;
+        }
+        .input-field:focus {
+          outline: none;
+          border-color: rgb(59 130 246);
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+        .dark .input-field {
+          background-color: rgb(55 65 81);
+          border-color: rgb(75 85 99);
+          color: rgb(243 244 246);
+        }
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.3s ease-out; }
+      `}</style>
     </div>
   );
 }
+
+// ─── Sub-components ──────────────────────────────────────
+
+const SectionHeader: React.FC<{ icon: React.ReactNode; title: string }> = ({ icon, title }) => (
+  <div className="flex items-center space-x-2 pb-3 border-b border-gray-200 dark:border-gray-700">
+    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white shadow-sm">
+      {icon}
+    </div>
+    <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
+  </div>
+);
+
+const Field: React.FC<{ label: string; icon?: React.ReactNode; children: React.ReactNode }> = ({ label, icon, children }) => (
+  <div className="space-y-1.5">
+    <label className="flex items-center space-x-1 text-[11px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+      {icon}
+      <span>{label}</span>
+    </label>
+    {children}
+  </div>
+);
+
+const StepBadge: React.FC<{ active: boolean; label: string }> = ({ active, label }) => (
+  <div className="flex items-center space-x-1.5">
+    <div
+      className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${
+        active
+          ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-md shadow-green-500/30'
+          : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+      }`}
+    >
+      {active ? <CheckCircle2 className="w-3.5 h-3.5" /> : '○'}
+    </div>
+    <span className={`text-xs font-semibold ${active ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'}`}>
+      {label}
+    </span>
+  </div>
+);
 
 export default App;

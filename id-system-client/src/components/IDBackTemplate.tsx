@@ -36,17 +36,17 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
             padding: '12px'
         }}
       >
-        {/* BACKGROUND BASE (RED) */}
-        <div style={{ ...absStyle, top: 0, left: 0, right: 0, height: '145px', backgroundColor: '#DC2626' }}></div>
+        {/* BACKGROUND BASE (RED GRADIENT) */}
+        <div style={{ ...absStyle, top: 0, left: 0, right: 0, height: '145px', background: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)' }}></div>
 
-        {/* CURVED BLUE HEADER - Refined to match image style */}
-        <div style={{ 
-            ...absStyle, 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            height: '140px', 
-            backgroundColor: '#1E3A8A', 
+        {/* CURVED BLUE HEADER */}
+        <div style={{
+            ...absStyle,
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '140px',
+            background: 'linear-gradient(160deg, #1E3A8A 0%, #1E40AF 60%, #1D4ED8 100%)',
             borderBottomLeftRadius: '50% 30px',
             borderBottomRightRadius: '50% 30px',
             zIndex: 10,
@@ -54,7 +54,8 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            paddingTop: '10px'
+            paddingTop: '10px',
+            boxShadow: 'inset 0 -2px 4px rgba(0,0,0,0.15)'
         }}>
              {/* STUDENT GROUP WATERMARK IN HEADER */}
              <div style={{ ...absStyle, top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, pointerEvents: 'none', zIndex: 5 }}>
@@ -130,8 +131,8 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
         </div>
 
         {/* SIDE ACCENTS */}
-        <div style={{ ...absStyle, left: 0, top: '145px', bottom: 0, width: '4px', backgroundColor: '#1E3A8A' }}></div>
-        <div style={{ ...absStyle, right: 0, top: '145px', bottom: 0, width: '4px', backgroundColor: '#DC2626' }}></div>
+        <div style={{ ...absStyle, left: 0, top: '145px', bottom: 0, width: '4px', background: 'linear-gradient(180deg, #1E3A8A 0%, #1D4ED8 100%)' }}></div>
+        <div style={{ ...absStyle, right: 0, top: '145px', bottom: 0, width: '4px', background: 'linear-gradient(180deg, #DC2626 0%, #B91C1C 100%)' }}></div>
       </div>
       <p style={{ marginTop: '16px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9CA3AF' }}>Portrait Back Design</p>
     </div>

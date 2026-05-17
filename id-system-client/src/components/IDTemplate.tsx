@@ -44,21 +44,22 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
             boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
         }}
       >
-        {/* BACKGROUND BASE (RED) */}
-        <div style={{ ...absStyle, top: 0, left: 0, right: 0, height: '145px', backgroundColor: '#DC2626' }}></div>
+        {/* BACKGROUND BASE (RED GRADIENT) */}
+        <div style={{ ...absStyle, top: 0, left: 0, right: 0, height: '145px', background: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)' }}></div>
 
-        {/* CURVED BLUE HEADER - Replicating image.png */}
-        <div style={{ 
-            ...absStyle, 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            height: '140px', 
-            backgroundColor: '#1E3A8A', 
+        {/* CURVED BLUE HEADER */}
+        <div style={{
+            ...absStyle,
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '140px',
+            background: 'linear-gradient(160deg, #1E3A8A 0%, #1E40AF 60%, #1D4ED8 100%)',
             borderBottomLeftRadius: '50% 30px',
             borderBottomRightRadius: '50% 30px',
             zIndex: 10,
-            overflow: 'hidden'
+            overflow: 'hidden',
+            boxShadow: 'inset 0 -2px 4px rgba(0,0,0,0.15)'
         }}>
              {/* TESDA NORTE WATERMARK - Enlarged */}
              <div style={{ ...absStyle, top: '10px', left: '-15px', opacity: 0.22, pointerEvents: 'none' }}>
@@ -77,57 +78,64 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
 
         {/* CIRCULAR PROFILE PHOTO - Overlapping the curve */}
         <div style={{ ...flexColStyle, alignItems: 'center', marginTop: '90px', position: 'relative', zIndex: 20 }}>
-            <div 
-                style={{ 
-                    width: '90px', 
-                    height: '90px', 
-                    border: '4px solid #FFFFFF', 
-                    borderRadius: '50%',
-                    overflow: 'hidden', 
-                    backgroundColor: '#F3F4F6',
-                    boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                {data.photoUrl ? (
-                    <img src={data.photoUrl} alt="Student" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                    <span style={{ fontSize: '10px', color: '#9CA3AF', fontWeight: 'bold' }}>PHOTO</span>
-                )}
+            {/* Outer gold/red accent ring */}
+            <div style={{
+                padding: '2px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #FBBF24 0%, #DC2626 100%)',
+                boxShadow: '0 6px 14px rgba(0,0,0,0.25)'
+            }}>
+                <div
+                    style={{
+                        width: '94px',
+                        height: '94px',
+                        border: '3px solid #FFFFFF',
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        backgroundColor: '#F3F4F6',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    {data.photoUrl ? (
+                        <img src={data.photoUrl} alt="Student" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                        <span style={{ fontSize: '10px', color: '#9CA3AF', fontWeight: 'bold', letterSpacing: '0.05em' }}>PHOTO</span>
+                    )}
+                </div>
             </div>
         </div>
 
         {/* BODY CONTENT */}
-        <div style={{ ...flexColStyle, alignItems: 'center', padding: '10px 10px 0', zIndex: 10 }}>
-            <div style={{ fontSize: '13px', fontWeight: 900, color: '#1E3A8A', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1 }}>
+        <div style={{ ...flexColStyle, alignItems: 'center', padding: '12px 10px 0', zIndex: 10 }}>
+            <div style={{ fontSize: '13px', fontWeight: 900, color: '#1E3A8A', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1, letterSpacing: '0.02em' }}>
                 {data.firstName || 'FIRSTNAME'} {data.middleInitial ? `${data.middleInitial}.` : ''}
             </div>
-            <div style={{ fontSize: '14px', fontWeight: 900, color: '#111827', textAlign: 'center', textTransform: 'uppercase', marginTop: '1px' }}>
+            <div style={{ fontSize: '14px', fontWeight: 900, color: '#111827', textAlign: 'center', textTransform: 'uppercase', marginTop: '1px', letterSpacing: '0.02em' }}>
                 {data.lastName || 'LASTNAME'}
             </div>
-            <div style={{ width: '35px', height: '1.5px', backgroundColor: '#DC2626', marginTop: '4px' }}></div>
+            <div style={{ width: '40px', height: '2px', background: 'linear-gradient(90deg, transparent, #DC2626, transparent)', marginTop: '5px' }}></div>
         </div>
 
         {/* COURSE & ID NUMBER */}
-        <div style={{ ...flexColStyle, padding: '5px 15px', flex: 1, justifyContent: 'center', zIndex: 10 }}>
-            <div style={{ ...flexColStyle, alignItems: 'center', marginBottom: '8px' }}>
-                <span style={{ fontSize: '6px', fontWeight: 'bold', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Course / Program</span>
-                <span style={{ fontSize: '8px', fontWeight: 900, color: '#1F2937', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1 }}>{data.course || 'DATA ANALYTICS LEVEL III'}</span>
+        <div style={{ ...flexColStyle, padding: '6px 15px', flex: 1, justifyContent: 'center', zIndex: 10 }}>
+            <div style={{ ...flexColStyle, alignItems: 'center', marginBottom: '9px' }}>
+                <span style={{ fontSize: '6px', fontWeight: 'bold', color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.12em' }}>Course / Program</span>
+                <span style={{ fontSize: '8.5px', fontWeight: 900, color: '#1F2937', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.1, marginTop: '2px' }}>{data.course || 'DATA ANALYTICS LEVEL III'}</span>
             </div>
-            
-            <div style={{ ...flexColStyle, alignItems: 'center' }}>
-                <span style={{ fontSize: '6px', fontWeight: 900, color: '#1E3A8A', textTransform: 'uppercase', letterSpacing: '0.1em', lineHeight: 1 }}>Student ID Number</span>
-                <span style={{ fontSize: '13px', fontWeight: 900, color: '#DC2626', fontFamily: 'monospace', lineHeight: 1 }}>{data.studentId || '2026-0000'}</span>
+
+            <div style={{ ...flexColStyle, alignItems: 'center', backgroundColor: 'rgba(254, 226, 226, 0.4)', padding: '4px 8px', borderRadius: '4px', border: '1px solid rgba(220, 38, 38, 0.15)' }}>
+                <span style={{ fontSize: '6px', fontWeight: 900, color: '#1E3A8A', textTransform: 'uppercase', letterSpacing: '0.12em', lineHeight: 1 }}>Student ID Number</span>
+                <span style={{ fontSize: '14px', fontWeight: 900, color: '#DC2626', fontFamily: 'monospace', lineHeight: 1.2, letterSpacing: '0.05em' }}>{data.studentId || '2026-0000'}</span>
             </div>
         </div>
 
         {/* FOOTER SECTION */}
         <div style={{ marginTop: 'auto', position: 'relative', zIndex: 20 }}>
-            <div style={{ width: '100%', height: '3px', backgroundColor: '#1E3A8A' }}></div>
-            <div style={{ backgroundColor: '#F9FAFB', padding: '5px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontSize: '6px', fontWeight: 900, color: '#1F2937', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Official Student Identification Card</span>
+            <div style={{ width: '100%', height: '4px', background: 'linear-gradient(90deg, #1E3A8A 0%, #DC2626 100%)' }}></div>
+            <div style={{ backgroundColor: '#F9FAFB', padding: '6px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '6px', fontWeight: 900, color: '#1F2937', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Official Student Identification Card</span>
             </div>
         </div>
 
