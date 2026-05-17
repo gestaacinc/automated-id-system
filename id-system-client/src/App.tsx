@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Save, UserPlus, Printer, FileText, IdCard, MapPin, Phone, GraduationCap, CheckCircle2 } from 'lucide-react';
+import { Save, UserPlus, Printer, FileText, IdCard, MapPin, Phone, GraduationCap, CheckCircle2, Droplet } from 'lucide-react';
 import PhotoUploader from './components/PhotoUploader';
 import IDTemplate from './components/IDTemplate';
 import IDBackTemplate from './components/IDBackTemplate';
 import { generateAndSavePDF } from './utils/pdfGenerator';
 import { ILOCOS_NORTE_DATA } from './utils/locations';
 
-interface StudentData {
+export interface StudentData {
   firstName: string;
   lastName: string;
   middleInitial: string;
@@ -14,12 +14,23 @@ interface StudentData {
   course: string;
   address: string;
   birthDate: string;
+  bloodType: string;
   emergencyContact: string;
   emergencyPhone: string;
   photoUrl: string | null;
+  issueDate: string;
+  validityDate: string;
 }
 
 const DEFAULT_COURSE = "Data Analytics Level III";
+const BLOOD_TYPES = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const plusYearISO = (years: number) => {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() + years);
+  return d.toISOString().slice(0, 10);
+};
 
 function App() {
   const [studentData, setStudentData] = useState<StudentData>({
@@ -30,9 +41,12 @@ function App() {
     course: DEFAULT_COURSE,
     address: '',
     birthDate: '',
+    bloodType: '',
     emergencyContact: '',
     emergencyPhone: '',
     photoUrl: null,
+    issueDate: todayISO(),
+    validityDate: plusYearISO(1),
   });
 
   const [selectedTown, setSelectedTown] = useState("");
@@ -103,9 +117,12 @@ function App() {
       course: DEFAULT_COURSE,
       address: '',
       birthDate: '',
+      bloodType: '',
       emergencyContact: '',
       emergencyPhone: '',
       photoUrl: null,
+      issueDate: todayISO(),
+      validityDate: plusYearISO(1),
     });
     setSelectedTown("");
     setSelectedBarangay("");
@@ -257,16 +274,27 @@ function App() {
                 />
               </Field>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-3">
                 <Field label="Birth Date">
                   <input
-                    type="text"
+                    type="date"
                     name="birthDate"
                     value={studentData.birthDate}
                     onChange={handleInputChange}
                     className="input-field"
-                    placeholder="MM/DD/YYYY"
                   />
+                </Field>
+                <Field label="Blood Type" icon={<Droplet className="w-3.5 h-3.5" />}>
+                  <select
+                    name="bloodType"
+                    value={studentData.bloodType}
+                    onChange={handleInputChange}
+                    className="input-field"
+                  >
+                    {BLOOD_TYPES.map(bt => (
+                      <option key={bt} value={bt}>{bt || '—'}</option>
+                    ))}
+                  </select>
                 </Field>
                 <Field label="Middle Initial">
                   <input

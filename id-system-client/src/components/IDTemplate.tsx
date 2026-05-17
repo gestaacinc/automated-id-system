@@ -78,12 +78,12 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
 
         {/* CIRCULAR PROFILE PHOTO - Overlapping the curve */}
         <div style={{ ...flexColStyle, alignItems: 'center', marginTop: '90px', position: 'relative', zIndex: 20 }}>
-            {/* Outer gold/red accent ring */}
+            {/* Outer navy/red accent ring (school colors) */}
             <div style={{
-                padding: '2px',
+                padding: '2.5px',
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #FBBF24 0%, #DC2626 100%)',
-                boxShadow: '0 6px 14px rgba(0,0,0,0.25)'
+                background: 'linear-gradient(135deg, #1E3A8A 0%, #DC2626 100%)',
+                boxShadow: '0 6px 14px rgba(0,0,0,0.3)'
             }}>
                 <div
                     style={{
