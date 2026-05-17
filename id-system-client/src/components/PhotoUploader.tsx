@@ -78,36 +78,49 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onPhotoProcessed }) => {
     }, 700);
   };
 
+  // These values must match the SVG crop window below (viewBox 75x100).
+  // Crop window: x=7.5, y=8, w=60, h=80 → normalized as %.
+  const CROP_X_PCT = 0.10;
+  const CROP_Y_PCT = 0.08;
+  const CROP_W_PCT = 0.80;
+  const CROP_H_PCT = 0.80;
+
   const capturePhoto = () => {
     const video = videoRef.current;
     if (!video || !video.videoWidth || !video.videoHeight) return;
     setIsCapturing(true);
 
-    // Capture the visible 3:4 portrait region so it matches what the user sees.
+    // Find the visible 3:4 portion of the video (matches what object-cover shows).
     const TARGET_ASPECT = 3 / 4;
     const vw = video.videoWidth;
     const vh = video.videoHeight;
-    let cropW: number;
-    let cropH: number;
+    let visW: number;
+    let visH: number;
     if (vw / vh > TARGET_ASPECT) {
-      cropH = vh;
-      cropW = cropH * TARGET_ASPECT;
+      visH = vh;
+      visW = visH * TARGET_ASPECT;
     } else {
-      cropW = vw;
-      cropH = cropW / TARGET_ASPECT;
+      visW = vw;
+      visH = visW / TARGET_ASPECT;
     }
-    const sx = (vw - cropW) / 2;
-    const sy = 0;
+    const visX = (vw - visW) / 2;
+    const visY = (vh - visH) / 2;
+
+    // Now crop to the bright window that the user sees (matches the SVG mask).
+    const sx = visX + visW * CROP_X_PCT;
+    const sy = visY + visH * CROP_Y_PCT;
+    const sw = visW * CROP_W_PCT;
+    const sh = visH * CROP_H_PCT;
 
     const canvas = document.createElement('canvas');
-    canvas.width = cropW;
-    canvas.height = cropH;
+    canvas.width = sw;
+    canvas.height = sh;
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       setIsCapturing(false);
       return;
     }
-    ctx.drawImage(video, sx, sy, cropW, cropH, 0, 0, cropW, cropH);
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, sw, sh);
 
     canvas.toBlob(
       (blob) => {
@@ -226,61 +239,54 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onPhotoProcessed }) => {
               preserveAspectRatio="none"
             >
               <defs>
-                <mask id="faceMask">
+                <mask id="cropMask">
                   <rect width="75" height="100" fill="white" />
-                  <ellipse cx="37.5" cy="40" rx="19" ry="24" fill="black" />
+                  <rect x="7.5" y="8" width="60" height="80" rx="2" fill="black" />
                 </mask>
               </defs>
+              {/* Darken everything OUTSIDE the bright capture rectangle */}
               <rect
                 width="75"
                 height="100"
-                fill="rgba(0,0,0,0.45)"
-                mask="url(#faceMask)"
+                fill="rgba(0,0,0,0.6)"
+                mask="url(#cropMask)"
               />
+              {/* Capture rectangle border (this is what gets photographed) */}
+              <rect
+                x="7.5"
+                y="8"
+                width="60"
+                height="80"
+                rx="2"
+                fill="none"
+                stroke="white"
+                strokeWidth="0.3"
+                strokeDasharray="2 1.5"
+                opacity="0.7"
+              />
+              {/* Big face positioning oval — fits a face comfortably */}
               <ellipse
                 cx="37.5"
                 cy="40"
-                rx="19"
-                ry="24"
+                rx="22"
+                ry="28"
                 fill="none"
-                stroke="white"
-                strokeWidth="0.35"
-                strokeDasharray="1.5 1.5"
+                stroke="#60a5fa"
+                strokeWidth="0.4"
+                strokeDasharray="1.5 1"
+                opacity="0.85"
               />
-              <path
-                d="M 6 6 L 6 14 M 6 6 L 14 6"
-                stroke="#10b981"
-                strokeWidth="0.7"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 69 6 L 69 14 M 69 6 L 61 6"
-                stroke="#10b981"
-                strokeWidth="0.7"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 6 94 L 6 86 M 6 94 L 14 94"
-                stroke="#10b981"
-                strokeWidth="0.7"
-                fill="none"
-                strokeLinecap="round"
-              />
-              <path
-                d="M 69 94 L 69 86 M 69 94 L 61 94"
-                stroke="#10b981"
-                strokeWidth="0.7"
-                fill="none"
-                strokeLinecap="round"
-              />
+              {/* Corner brackets on the capture rectangle */}
+              <path d="M 11.5 8 L 7.5 8 L 7.5 12" stroke="#10b981" strokeWidth="0.7" fill="none" strokeLinecap="round" />
+              <path d="M 63.5 8 L 67.5 8 L 67.5 12" stroke="#10b981" strokeWidth="0.7" fill="none" strokeLinecap="round" />
+              <path d="M 67.5 84 L 67.5 88 L 63.5 88" stroke="#10b981" strokeWidth="0.7" fill="none" strokeLinecap="round" />
+              <path d="M 11.5 88 L 7.5 88 L 7.5 84" stroke="#10b981" strokeWidth="0.7" fill="none" strokeLinecap="round" />
             </svg>
 
             {cameraReady && countdown === null && (
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm px-3 py-1 rounded-full">
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full">
                 <p className="text-[10px] font-semibold text-white uppercase tracking-wider">
-                  Center your face in the oval
+                  Fit face inside the blue oval
                 </p>
               </div>
             )}
