@@ -134,9 +134,9 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
                 <span style={{ fontSize: '8.5px', fontWeight: 900, color: '#1F2937', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.1, marginTop: '2px' }}>{data.course || 'DATA ANALYTICS LEVEL III'}</span>
             </div>
 
-            <div style={{ ...flexColStyle, alignItems: 'center', backgroundColor: 'rgba(254, 226, 226, 0.4)', padding: '5px 18px 6px', borderRadius: '4px', border: '1px solid rgba(220, 38, 38, 0.15)', minWidth: '110px' }}>
+            <div style={{ ...flexColStyle, alignItems: 'center', backgroundColor: 'rgba(254, 226, 226, 0.4)', padding: '4px 18px 5px', borderRadius: '4px', border: '1px solid rgba(220, 38, 38, 0.15)', minWidth: '110px' }}>
                 <span style={{ fontSize: '6px', fontWeight: 900, color: '#1E3A8A', textTransform: 'uppercase', letterSpacing: '0.12em', lineHeight: 1 }}>Student ID Number</span>
-                <span style={{ fontSize: '13px', fontWeight: 900, color: '#DC2626', fontFamily: 'monospace', lineHeight: 1.2, letterSpacing: '0.04em', marginTop: '2px' }}>{data.studentId || '2026-0000'}</span>
+                <span style={{ fontSize: '13px', fontWeight: 900, color: '#DC2626', fontFamily: 'monospace', lineHeight: 1, letterSpacing: '0.04em', marginTop: '1px' }}>{data.studentId || '2026-0000'}</span>
             </div>
         </div>
 

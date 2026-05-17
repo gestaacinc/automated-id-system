@@ -208,13 +208,13 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
 
             {/* Signature */}
             <div style={{ flex: 1, position: 'relative' }}>
-              <div style={{ position: 'relative', height: '32px', borderBottom: '1px solid #000000' }}>
+              <div style={{ position: 'relative', height: '36px', borderBottom: '1px solid #000000' }}>
                 <img
                   src={`${BASE}logos/signature.png`}
                   alt="Signature"
                   style={{
                     position: 'absolute',
-                    bottom: '-8px',
+                    bottom: '-6px',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     height: '42px',
@@ -224,7 +224,7 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
                     pointerEvents: 'none',
                   }}
                 />
-                <span style={{ position: 'absolute', bottom: '1px', left: '50%', transform: 'translateX(-50%)', fontSize: '7.5px', fontWeight: 900, color: '#1E3A8A', whiteSpace: 'nowrap', zIndex: 10 }}>KATHERINE D. BAUTISTA</span>
+                <span style={{ position: 'absolute', bottom: '5px', left: '50%', transform: 'translateX(-50%)', fontSize: '7.5px', fontWeight: 900, color: '#1E3A8A', whiteSpace: 'nowrap', zIndex: 10 }}>KATHERINE D. BAUTISTA</span>
               </div>
               <span style={{ display: 'block', textAlign: 'center', fontSize: '5px', fontWeight: 900, textTransform: 'uppercase', color: '#6B7280', marginTop: '1px', letterSpacing: '0.05em' }}>School Administrator</span>
             </div>
