@@ -1,6 +1,20 @@
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 
+const waitForImagesToLoad = (el: HTMLElement): Promise<void> => {
+  const imgs = Array.from(el.querySelectorAll('img'));
+  const pending = imgs
+    .filter((img) => !img.complete || img.naturalWidth === 0)
+    .map(
+      (img) =>
+        new Promise<void>((resolve) => {
+          img.addEventListener('load', () => resolve(), { once: true });
+          img.addEventListener('error', () => resolve(), { once: true });
+        })
+    );
+  return Promise.all(pending).then(() => undefined);
+};
+
 export const generateAndSavePDF = async (
   frontElement: HTMLElement,
   backElement: HTMLElement,
@@ -8,21 +22,27 @@ export const generateAndSavePDF = async (
   studentId: string
 ): Promise<{ success: boolean; path?: string; error?: string }> => {
   try {
+    // Ensure all photos/logos/QR are fully loaded before snapshot
+    await waitForImagesToLoad(frontElement);
+    await waitForImagesToLoad(backElement);
+
     const captureOptions = {
       scale: 3,
       useCORS: true,
-      backgroundColor: null,
+      allowTaint: true,
+      backgroundColor: '#FFFFFF',
       width: 204,
       height: 324,
+      imageTimeout: 15000,
       onclone: (clonedDoc: Document) => {
         const styleTags = clonedDoc.getElementsByTagName('style');
         for (let i = 0; i < styleTags.length; i++) {
-          let css = styleTags[i].innerHTML;
+          const css = styleTags[i].innerHTML;
           if (css.includes('oklch')) {
             styleTags[i].innerHTML = css.replace(/oklch\([^)]+\)/g, '#000000');
           }
         }
-      }
+      },
     };
 
     const frontCanvas = await html2canvas(frontElement, captureOptions);

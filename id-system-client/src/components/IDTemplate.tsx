@@ -93,14 +93,16 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
                         borderRadius: '50%',
                         overflow: 'hidden',
                         backgroundColor: '#F3F4F6',
+                        backgroundImage: data.photoUrl ? `url("${data.photoUrl}")` : 'none',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center 25%',
+                        backgroundRepeat: 'no-repeat',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
                 >
-                    {data.photoUrl ? (
-                        <img src={data.photoUrl} alt="Student" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
+                    {!data.photoUrl && (
                         <span style={{ fontSize: '10px', color: '#9CA3AF', fontWeight: 'bold', letterSpacing: '0.05em' }}>PHOTO</span>
                     )}
                 </div>
