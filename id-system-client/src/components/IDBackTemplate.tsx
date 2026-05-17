@@ -1,5 +1,7 @@
 import React from 'react';
 
+const BASE = import.meta.env.BASE_URL;
+
 interface IDBackTemplateProps {
   data: {
     address: string;
@@ -56,14 +58,14 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
         }}>
              {/* STUDENT GROUP WATERMARK IN HEADER */}
              <div style={{ ...absStyle, top: 0, left: 0, right: 0, bottom: 0, opacity: 0.15, pointerEvents: 'none', zIndex: 5 }}>
-                <img src="/logos/student-group-bg.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={`${BASE}logos/student-group-bg.png`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
              </div>
 
              {/* PROUD TESDA SCHOLAR LOGO/TEXT AREA */}
              <div style={{ position: 'relative', zIndex: 20, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {/* TESDA LOGO WITH WHITE CIRCULAR BACKGROUND */}
              <div style={{ backgroundColor: '#FFFFFF', padding: '5px', borderRadius: '50%', marginBottom: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src="/logos/tesda-logo.png" alt="TESDA" style={{ height: '30px', width: '30px', objectFit: 'contain' }} />
+                <img src={`${BASE}logos/tesda-logo.png`} alt="TESDA" style={{ height: '30px', width: '30px', objectFit: 'contain' }} />
              </div>
              <span style={{ fontSize: '11px', fontWeight: 300, color: '#FFFFFF', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.1, fontFamily: '"Century Gothic", CenturyGothic, AppleGothic, sans-serif' }}>PROUD</span>
              <span style={{ fontSize: '14px', fontWeight: 900, color: '#FFFFFF', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.1, fontFamily: '"Century Gothic", CenturyGothic, AppleGothic, sans-serif' }}>TESDA</span>
@@ -101,9 +103,9 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
             {/* ADMINISTRATOR SIGNATURE & LOGO */}
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '2px' }}>
                 <div style={{ width: '100%', height: '30px', borderBottom: '1px solid #000000', marginBottom: '1px', position: 'relative' }}>
-                     <img 
-                        src="/logos/signature.png" 
-                        alt="Signature" 
+                     <img
+                        src={`${BASE}logos/signature.png`}
+                        alt="Signature"
                         style={{ 
                             position: 'absolute', 
                             bottom: '-12px', 
@@ -122,7 +124,7 @@ const IDBackTemplate: React.FC<IDBackTemplateProps> = ({ data, idRef }) => {
                 
                 {/* TESDA KAYANG KAYA LOGO */}
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
-                     <img src="/logos/tesda-kayang-kaya.png" alt="TESDA" style={{ height: '20px', objectFit: 'contain' }} />
+                     <img src={`${BASE}logos/tesda-kayang-kaya.png`} alt="TESDA" style={{ height: '20px', objectFit: 'contain' }} />
                 </div>
             </div>
         </div>

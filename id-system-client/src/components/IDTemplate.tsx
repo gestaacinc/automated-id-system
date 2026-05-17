@@ -1,5 +1,7 @@
 import React from 'react';
 
+const BASE = import.meta.env.BASE_URL;
+
 interface StudentData {
   firstName: string;
   lastName: string;
@@ -60,12 +62,12 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
         }}>
              {/* TESDA NORTE WATERMARK - Enlarged */}
              <div style={{ ...absStyle, top: '10px', left: '-15px', opacity: 0.22, pointerEvents: 'none' }}>
-                <img src="/logos/tesda-norte-logo.png" alt="" style={{ width: '135px', objectFit: 'contain' }} />
+                <img src={`${BASE}logos/tesda-norte-logo.png`} alt="" style={{ width: '135px', objectFit: 'contain' }} />
              </div>
 
              {/* SCHOOL LOGO & NAME (Inside Blue Area) - Enlarged */}
              <div style={{ ...flexColStyle, alignItems: 'center', marginTop: '12px', padding: '0 8px', position: 'relative', zIndex: 30 }}>
-                <img src="/logos/school-logo.png" alt="GESTAAC" style={{ height: '42px', width: '42px', objectFit: 'contain', backgroundColor: '#FFFFFF', borderRadius: '50%', padding: '3px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }} />
+                <img src={`${BASE}logos/school-logo.png`} alt="GESTAAC" style={{ height: '42px', width: '42px', objectFit: 'contain', backgroundColor: '#FFFFFF', borderRadius: '50%', padding: '3px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }} />
                 <div style={{ ...flexColStyle, alignItems: 'center', marginTop: '6px' }}>
                     <span style={{ fontSize: '8px', fontWeight: 900, color: '#FFFFFF', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.1, letterSpacing: '0.1px' }}>Great Enthusiasts of Skills Training Academy</span>
                     <span style={{ fontSize: '7px', fontWeight: 'bold', color: '#BFDBFE', textAlign: 'center', textTransform: 'uppercase', lineHeight: 1.1 }}>and Assessment Center Inc.</span>
@@ -131,7 +133,7 @@ const IDTemplate: React.FC<IDTemplateProps> = ({ data, idRef }) => {
 
         {/* BODY WATERMARK (Student Group) */}
         <div style={{ ...absStyle, top: '110px', left: 0, right: 0, bottom: '27px', overflow: 'hidden', opacity: 0.08, pointerEvents: 'none', zIndex: 1 }}>
-            <img src="/logos/student-group-bg.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <img src={`${BASE}logos/student-group-bg.png`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
       </div>
       <p style={{ marginTop: '16px', fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9CA3AF' }}>Portrait Reference Design</p>
