@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\CHESTER\\\\automated-id-system\" -Recurse -Directory)",
+      "Bash(Select-Object -First 20)",
+      "Bash(Format-Table FullName)",
+      "Bash(npm start *)",
+      "Bash(npm run *)",
+      "Bash(netstat -ano)",
+      "PowerShell(Stop-Process *)",
+      "Bash(npm install *)"
+    ]
+  }
+}
